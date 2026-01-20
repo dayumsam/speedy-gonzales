@@ -184,8 +184,9 @@ class RSVPReader {
   
   play() {
     if (this.isPlaying) return;
-    
+
     this.isPlaying = true;
+    this.overlay.classList.add('is-playing');
     this.overlay.querySelector('#rsvp-play').style.display = 'none';
     this.overlay.querySelector('#rsvp-pause').style.display = 'block';
     
@@ -209,8 +210,9 @@ class RSVPReader {
   
   pause() {
     if (!this.isPlaying) return;
-    
+
     this.isPlaying = false;
+    this.overlay.classList.remove('is-playing');
     this.overlay.querySelector('#rsvp-play').style.display = 'block';
     this.overlay.querySelector('#rsvp-pause').style.display = 'none';
     

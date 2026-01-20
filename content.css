@@ -205,6 +205,35 @@
   }
 }
 
+/* Fade UI when playing - zen mode */
+#rsvp-overlay.is-playing .rsvp-header {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+#rsvp-overlay.is-playing .rsvp-controls {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+#rsvp-overlay.is-playing .rsvp-speed-control {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+#rsvp-overlay.is-playing .rsvp-container:hover .rsvp-header,
+#rsvp-overlay.is-playing .rsvp-container:hover .rsvp-controls,
+#rsvp-overlay.is-playing .rsvp-container:hover .rsvp-speed-control {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.rsvp-header,
+.rsvp-controls,
+.rsvp-speed-control {
+  transition: opacity 0.4s ease;
+}
+
 .rsvp-controls {
   display: flex;
   justify-content: center;
