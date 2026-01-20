@@ -4,6 +4,7 @@ A Chrome extension that transforms any article into a Rapid Serial Visual Presen
 
 ## Features
 
+- **Text Selection Support** — Select specific text to read, or let it extract the full article
 - **Adaptive Text Extraction** — Automatically detects and extracts readable content from articles
 - **Customizable Speed** — Adjust reading speed from 100 to 1000 WPM
 - **Focus Letter Highlighting** — Optional highlighting of the optimal fixation point in each word
@@ -32,16 +33,24 @@ A Chrome extension that transforms any article into a Rapid Serial Visual Presen
 - Adjust settings as desired
 - Click "Start Reading"
 
-### Controls
+### Reading Selected Text
+
+Select any text on a page before starting the reader:
+1. Highlight the text you want to read
+2. Press `Alt+Shift+R` or click Start Reading
+3. Only the selected text will be displayed
+
+If no text is selected, the full article will be extracted automatically.
+
+### Keyboard Shortcuts
 
 | Key | Action |
 |-----|--------|
-| `Alt+Shift+R` | Start Speedy Gonzales |
+| `Alt+Shift+R` | Start reader (customizable) |
 | `Space` | Play / Pause |
 | `R` | Restart |
 | `Esc` | Close reader |
-
-Speed can also be adjusted with the +50 / -50 buttons during reading.
+| `+50 / -50` | Adjust speed (on-screen buttons) |
 
 ### Recommended Reading Speeds
 

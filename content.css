@@ -159,25 +159,29 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
 }
 
 .rsvp-word .word-before {
   text-align: right;
-  min-width: 200px;
+  flex: 1;
   display: inline-block;
+  white-space: nowrap;
 }
 
 .rsvp-word .word-after {
   text-align: left;
-  min-width: 200px;
+  flex: 1;
   display: inline-block;
+  white-space: nowrap;
 }
 
 .rsvp-word .focus-letter,
 .rsvp-word .focus-letter-plain {
   display: inline-block;
   text-align: center;
-  min-width: 0.6em;
+  min-width: 0.2em;
+  flex: 0 0 auto;
 }
 
 .rsvp-word .focus-letter {
@@ -309,7 +313,7 @@
 
   .rsvp-word .word-before,
   .rsvp-word .word-after {
-    min-width: 120px;
+    min-width: 0;
   }
 
   .rsvp-btn {
