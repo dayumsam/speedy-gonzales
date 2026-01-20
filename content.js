@@ -306,16 +306,35 @@ function showLoadingOverlay() {
   return overlay;
 }
 
+// Get selected text if any
+function getSelectedText() {
+  const selection = window.getSelection();
+  const text = selection.toString().trim();
+  if (text.length > 0) {
+    return text.replace(/\s+/g, ' ').split(/\s+/).filter(word => word.length > 0);
+  }
+  return null;
+}
+
 // Listen for messages from popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'startRSVP') {
+    // Check for selected text first
+    const selectedWords = getSelectedText();
+
     // Remove any existing RSVP overlay
     const existingOverlay = document.getElementById('rsvp-overlay');
     if (existingOverlay) {
       existingOverlay.remove();
     }
 
-    // Show loading state immediately
+    // If text is selected, use it directly without loading screen
+    if (selectedWords && selectedWords.length > 0) {
+      new RSVPReader(selectedWords, request.settings);
+      return;
+    }
+
+    // Show loading state for full page extraction
     const loadingOverlay = showLoadingOverlay();
 
     // Extract text asynchronously to allow UI to render
