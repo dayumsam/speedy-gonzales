@@ -2,6 +2,8 @@
 
 A Chrome extension that transforms any article into a Rapid Serial Visual Presentation (RSVP) reader for faster reading and improved comprehension.
 
+![Speedy Gonzales Full Article Demo](docs/all_text.gif)
+
 ## Features
 
 - **Text Selection Support** — Select specific text to read, or let it extract the full article
