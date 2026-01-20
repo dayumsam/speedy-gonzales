@@ -23,10 +23,10 @@
   "commands": {
     "start-rsvp": {
       "suggested_key": {
-        "default": "Alt+Shift+R",
-        "mac": "Alt+Shift+R"
+        "default": "Alt+Shift+S",
+        "mac": "Alt+Shift+S"
       },
-      "description": "Start RSVP Reader"
+      "description": "Start Speedy Gonzales"
     }
   },
   "content_scripts": [

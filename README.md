@@ -25,7 +25,7 @@ A Chrome extension that transforms any article into a Rapid Serial Visual Presen
 ### Starting the Reader
 
 **Option 1: Keyboard Shortcut**
-- Press `Alt+Shift+R` on any webpage to instantly start reading
+- Press `Alt+Shift+S` on any webpage to instantly start reading
 - Customize this shortcut at `chrome://extensions/shortcuts`
 
 **Option 2: Extension Popup**
@@ -37,7 +37,7 @@ A Chrome extension that transforms any article into a Rapid Serial Visual Presen
 
 Select any text on a page before starting the reader:
 1. Highlight the text you want to read
-2. Press `Alt+Shift+R` or click Start Reading
+2. Press `Alt+Shift+S` or click Start Reading
 3. Only the selected text will be displayed
 
 If no text is selected, the full article will be extracted automatically.
@@ -46,7 +46,7 @@ If no text is selected, the full article will be extracted automatically.
 
 | Key | Action |
 |-----|--------|
-| `Alt+Shift+R` | Start reader (customizable) |
+| `Alt+Shift+S` | Start reader (customizable) |
 | `Space` | Play / Pause |
 | `R` | Restart |
 | `Esc` | Close reader |
