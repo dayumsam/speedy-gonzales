@@ -1,4 +1,4 @@
-# RSVP Speed Reader
+# Speedy Gonzales
 
 A Chrome extension that transforms any article into a Rapid Serial Visual Presentation (RSVP) reader for faster reading and improved comprehension.
 
@@ -28,7 +28,7 @@ A Chrome extension that transforms any article into a Rapid Serial Visual Presen
 - Customize this shortcut at `chrome://extensions/shortcuts`
 
 **Option 2: Extension Popup**
-- Click the RSVP Reader extension icon in your toolbar
+- Click the Speedy Gonzales extension icon in your toolbar
 - Adjust settings as desired
 - Click "Start Reading"
 
@@ -36,7 +36,7 @@ A Chrome extension that transforms any article into a Rapid Serial Visual Presen
 
 | Key | Action |
 |-----|--------|
-| `Alt+Shift+R` | Start RSVP Reader |
+| `Alt+Shift+R` | Start Speedy Gonzales |
 | `Space` | Play / Pause |
 | `R` | Restart |
 | `Esc` | Close reader |

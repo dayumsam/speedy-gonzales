@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "RSVP Speed Reader",
+  "name": "Speedy Gonzales",
   "version": "1.0",
   "description": "Read any article at lightning speed with Rapid Serial Visual Presentation",
   "permissions": ["activeTab", "scripting", "storage"],

@@ -292,23 +292,45 @@ class RSVPReader {
   }
 }
 
+// Show loading overlay
+function showLoadingOverlay() {
+  const overlay = document.createElement('div');
+  overlay.id = 'rsvp-overlay';
+  overlay.innerHTML = `
+    <div class="rsvp-loading">
+      <div class="rsvp-loading-spinner"></div>
+      <p>Extracting text...</p>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  return overlay;
+}
+
 // Listen for messages from popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'startRSVP') {
-    const words = extractArticleText();
-    
-    if (words.length === 0) {
-      alert('No readable text found on this page. Please navigate to an article or webpage with text content.');
-      return;
-    }
-    
     // Remove any existing RSVP overlay
     const existingOverlay = document.getElementById('rsvp-overlay');
     if (existingOverlay) {
       existingOverlay.remove();
     }
-    
-    // Create new RSVP reader
-    new RSVPReader(words, request.settings);
+
+    // Show loading state immediately
+    const loadingOverlay = showLoadingOverlay();
+
+    // Extract text asynchronously to allow UI to render
+    setTimeout(() => {
+      const words = extractArticleText();
+
+      if (words.length === 0) {
+        loadingOverlay.remove();
+        alert('No readable text found on this page. Please navigate to an article or webpage with text content.');
+        return;
+      }
+
+      // Remove loading overlay and create reader
+      loadingOverlay.remove();
+      new RSVPReader(words, request.settings);
+    }, 50);
   }
 });

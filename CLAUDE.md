@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-RSVP Speed Reader is a Chrome Extension (Manifest V3) that transforms any article into a Rapid Serial Visual Presentation reader. It's a zero-dependency, pure vanilla JavaScript/CSS project with no build process.
+Speedy Gonzales is a Chrome Extension (Manifest V3) that transforms any article into a Rapid Serial Visual Presentation (RSVP) reader. It's a zero-dependency, pure vanilla JavaScript/CSS project with no build process.
 
 ## Development
 
