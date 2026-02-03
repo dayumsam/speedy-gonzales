@@ -132,6 +132,13 @@ function createRSVPOverlay(settings) {
         <span class="rsvp-current-wpm">${settings.wpm} WPM</span>
         <button class="rsvp-speed-btn" id="rsvp-faster">+50</button>
       </div>
+
+      <div class="rsvp-timeline">
+        <div class="rsvp-timeline-track">
+          <div class="rsvp-timeline-progress"></div>
+          <div class="rsvp-timeline-handle"></div>
+        </div>
+      </div>
     </div>
   `;
   
@@ -156,9 +163,13 @@ class RSVPReader {
     this.wordCount = this.overlay.querySelector('.rsvp-word-count');
     this.timeDisplay = this.overlay.querySelector('.rsvp-time');
     this.wpmDisplay = this.overlay.querySelector('.rsvp-current-wpm');
-    
+    this.timelineTrack = this.overlay.querySelector('.rsvp-timeline-track');
+    this.timelineProgress = this.overlay.querySelector('.rsvp-timeline-progress');
+    this.timelineHandle = this.overlay.querySelector('.rsvp-timeline-handle');
+
     this.setupEventListeners();
     this.updateDisplay();
+    this.updateTimeline();
   }
   
   setupEventListeners() {
@@ -168,7 +179,34 @@ class RSVPReader {
     this.overlay.querySelector('#rsvp-close').addEventListener('click', () => this.close());
     this.overlay.querySelector('#rsvp-slower').addEventListener('click', () => this.adjustSpeed(-50));
     this.overlay.querySelector('#rsvp-faster').addEventListener('click', () => this.adjustSpeed(50));
-    
+
+    // Timeline scrubbing
+    let isDragging = false;
+
+    const seekToPosition = (e) => {
+      const rect = this.timelineTrack.getBoundingClientRect();
+      const percent = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      const newIndex = Math.floor(percent * this.words.length);
+      this.seekTo(newIndex);
+    };
+
+    this.timelineTrack.addEventListener('click', seekToPosition);
+
+    this.timelineHandle.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (isDragging) {
+        seekToPosition(e);
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+
     // Keyboard controls
     document.addEventListener('keydown', (e) => {
       if (e.key === ' ' && e.target === document.body) {
@@ -178,8 +216,32 @@ class RSVPReader {
         this.close();
       } else if (e.key === 'r' || e.key === 'R') {
         this.restart();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        this.seekTo(Math.max(0, this.currentIndex - 10));
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        this.seekTo(Math.min(this.words.length - 1, this.currentIndex + 10));
       }
     });
+  }
+
+  seekTo(index) {
+    const wasPlaying = this.isPlaying;
+    if (wasPlaying) this.pause();
+
+    this.currentIndex = index;
+    this.updateDisplay();
+    this.updateProgress();
+    this.updateTimeline();
+
+    if (wasPlaying) this.play();
+  }
+
+  updateTimeline() {
+    const progress = this.words.length > 0 ? (this.currentIndex / this.words.length) * 100 : 0;
+    this.timelineProgress.style.width = `${progress}%`;
+    this.timelineHandle.style.left = `${progress}%`;
   }
   
   play() {
@@ -286,11 +348,13 @@ class RSVPReader {
     const progress = (this.currentIndex / this.words.length) * 100;
     this.progressBar.style.width = `${progress}%`;
     this.wordCount.textContent = `${this.currentIndex} / ${this.words.length}`;
-    
+
     const elapsed = this.pausedTime || (this.startTime ? Date.now() - this.startTime : 0);
     const minutes = Math.floor(elapsed / 60000);
     const seconds = Math.floor((elapsed % 60000) / 1000);
     this.timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+    this.updateTimeline();
   }
 }
 
@@ -318,8 +382,14 @@ function getSelectedText() {
   return null;
 }
 
-// Listen for messages from popup
+// Listen for messages from background/popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  // Ping to check if script is already injected
+  if (request.action === 'ping') {
+    sendResponse({ status: 'ok' });
+    return true;
+  }
+
   if (request.action === 'startRSVP') {
     // Check for selected text first
     const selectedWords = getSelectedText();

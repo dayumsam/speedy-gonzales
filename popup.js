@@ -31,18 +31,15 @@ document.getElementById('highlightFocus').addEventListener('change', (e) => {
 
 // Start reading button
 document.getElementById('startBtn').addEventListener('click', async () => {
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  
-  // Get current settings
+  // Save current settings before starting
   const wpm = parseInt(document.getElementById('wpm').value);
   const fontSize = parseInt(document.getElementById('fontSize').value);
   const highlightFocus = document.getElementById('highlightFocus').checked;
-  
-  // Send message to content script to start RSVP
-  chrome.tabs.sendMessage(tab.id, {
-    action: 'startRSVP',
-    settings: { wpm, fontSize, highlightFocus }
-  });
-  
+
+  await chrome.storage.sync.set({ wpm, fontSize, highlightFocus });
+
+  // Tell background script to inject and start RSVP
+  chrome.runtime.sendMessage({ action: 'startFromPopup' });
+
   window.close();
 });

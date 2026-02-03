@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Speedy Gonzales is a Chrome Extension (Manifest V3) that transforms any article into a Rapid Serial Visual Presentation (RSVP) reader. It's a zero-dependency, pure vanilla JavaScript/CSS project with no build process.
+QuickRead is a Chrome Extension (Manifest V3) that transforms any article into a Rapid Serial Visual Presentation (RSVP) reader. It's a zero-dependency, pure vanilla JavaScript/CSS project with no build process.
 
 ## Development
 
@@ -16,30 +16,56 @@ No build, lint, or test commands exist. To develop:
 
 ## Architecture
 
-**Two execution contexts communicate via Chrome message passing:**
+**Three execution contexts communicate via Chrome message passing:**
 
-1. **Popup (popup.html/js/css)** - Settings panel that opens when clicking the extension icon
+1. **Background Service Worker (background.js)**
+   - Listens for keyboard shortcut (`Alt+Shift+S`)
+   - Listens for messages from popup
+   - Programmatically injects content script and CSS using `chrome.scripting` API
+   - Only injects when user explicitly activates (no broad host permissions)
+
+2. **Popup (popup.html/js/css)** - Settings panel
    - Manages user preferences (speed, font size, focus letter toggle)
    - Persists settings to `chrome.storage.sync`
-   - Sends settings to content script via `chrome.tabs.sendMessage()`
+   - Sends `startFromPopup` message to background script
 
-2. **Content Script (content.js/css)** - Injected into web pages
-   - `extractArticleText()` - Intelligent text extraction prioritizing semantic HTML (`<article>`, `<main>`, `[role="main"]`)
+3. **Content Script (content.js/css)** - Injected on-demand
+   - `extractArticleText()` - TreeWalker-based text extraction
    - `createRSVPOverlay()` - Creates the full-screen reading interface
-   - `RSVPReader` class - Core playback controller with play/pause/restart/speed adjustment
+   - `RSVPReader` class - Core playback controller
+   - `getSelectedText()` - Detects text selection for reading specific content
 
-**Data flow:** Popup collects settings → sends message with `action='startRSVP'` → content script creates RSVPReader instance → overlay displayed
+**Data flow:**
+```
+User triggers (popup click / keyboard shortcut)
+    ↓
+background.js receives trigger
+    ↓
+Injects content.js/css via chrome.scripting (if not already injected)
+    ↓
+Sends startRSVP message with settings
+    ↓
+content.js creates RSVPReader instance
+    ↓
+Overlay displayed, user controls playback
+```
 
 ## Key Implementation Details
 
-- Focus letter position algorithm in `RSVPReader.showWord()` uses word length to determine which letter to highlight (lines 180-195 in content.js)
-- Speed calculation: `60000 / wpm` milliseconds per word
-- Keyboard shortcuts: Space (play/pause), R (restart), Esc (close)
-- Text extraction removes 11+ element types (nav, ads, scripts, etc.) before processing
+- **Programmatic injection**: Uses `activeTab` + `scripting` permissions instead of `content_scripts` with `<all_urls>` to avoid broad host permissions
+- **Ping detection**: Content script responds to `ping` action to prevent double injection
+- **Focus letter algorithm**: Position based on word length (lines 332-339 in content.js)
+- **Timeline scrubber**: Click/drag to seek, arrow keys skip 10 words
+- **Zen mode**: Controls fade to opacity 0 during playback via `.is-playing` class
 
-## Styling Conventions
+## Permissions
+
+- `activeTab` - Access current tab on user action
+- `scripting` - Inject content script programmatically
+- `storage` - Save user preferences (WPM, font size, highlight toggle)
+
+## Styling
 
 - Accent color: `#ff6b35` (orange)
 - Dark theme backgrounds: `#0a0a0f`, `#151520`
-- Uses CSS custom properties for theme consistency
-- Google Fonts: Crimson Pro (headers), Libre Baskerville (reader), JetBrains Mono (monospace)
+- Fonts: Libre Baskerville (reader), JetBrains Mono (UI)

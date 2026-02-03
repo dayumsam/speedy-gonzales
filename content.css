@@ -324,6 +324,68 @@
   text-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
 }
 
+/* Timeline scrubber */
+.rsvp-timeline {
+  width: 100%;
+  padding: 20px 0;
+}
+
+.rsvp-timeline-track {
+  position: relative;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.rsvp-timeline-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #ff6b35, #ff8c5a);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.rsvp-timeline-handle {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 18px;
+  height: 18px;
+  background: #ffffff;
+  border: 3px solid #ff6b35;
+  border-radius: 50%;
+  cursor: grab;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.rsvp-timeline-handle:hover {
+  transform: translate(-50%, -50%) scale(1.2);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+}
+
+.rsvp-timeline-handle:active {
+  cursor: grabbing;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+#rsvp-overlay.is-playing .rsvp-timeline {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+#rsvp-overlay.is-playing .rsvp-container:hover .rsvp-timeline {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.rsvp-timeline {
+  transition: opacity 0.4s ease;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .rsvp-container {

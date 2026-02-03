@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Speedy Gonzales",
+  "name": "QuickRead",
   "version": "1.0",
   "description": "Read any article at lightning speed with Rapid Serial Visual Presentation",
   "permissions": ["activeTab", "scripting", "storage"],
@@ -26,14 +26,7 @@
         "default": "Alt+Shift+S",
         "mac": "Alt+Shift+S"
       },
-      "description": "Start Speedy Gonzales"
+      "description": "Start QuickRead"
     }
-  },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"],
-      "css": ["content.css"]
-    }
-  ]
+  }
 }
